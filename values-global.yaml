@@ -1,6 +1,6 @@
 ---
 global:
-  pattern: multicloud-gitops
+  pattern: npss-tnc
 
   options:
     useCSV: false

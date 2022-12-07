@@ -1,0 +1,82 @@
+---
+global:
+  pattern: npss-tnc
+
+secretStore:
+  name: vault-backend
+  kind: ClusterSecretStore
+
+cloudInit:
+  defaultUser: 'cloud-user'
+  defaultPassword: '6toh-n1d5-9xpq'
+
+# Or "RWO" and "gp2"; other choices are possible too but
+# these are defaults for ODF which is included in the pattern
+defaultAccessMode: "ReadWriteMany"
+defaultStorageClassName: "ocs-storagecluster-ceph-rbd"
+defaultVolumeMode: "Block"
+
+vmNamespace: tnc-gitops-vms
+
+waitForMetalNode: true
+jobTerminationGracePeriod: 3600
+
+vms:
+  kiosk:
+    count: 2
+    flavor: medium
+    workload: desktop
+    os: rhel8
+    role: kiosk
+    storage: 30Gi
+    memory: 4Gi
+    cores: 1
+    sockets: 1
+    threads: 1
+    cloudInitUser: cloud-user
+    cloudInitPassword: 6toh-n1d5-9xpq
+    template: rhel8-desktop-medium
+    sshsecret: secret/data/hub/kiosk-ssh
+    sshpubkeyfield: publickey
+    ports:
+      - name: ssh
+        port: 22
+        protocol: TCP
+        targetPort: 22
+      - name: rdp
+        port: 3389
+        protocol: TCP
+        targetPort: 3389
+
+serviceAccountName: ansible-tnc-gitops-sa
+rbac:
+  roles:
+    - name: view-machine-api
+      createRole: true
+      apiGroups:
+        - machine.openshift.io
+      scope:
+        cluster: true
+      resources:
+        - machinesets
+      verbs:
+        - "get"
+        - "list"
+        - "watch"
+  roleBindings:
+    - name: view-machine-api
+      createBinding: true
+      scope:
+        cluster: false
+        namespace: "openshift-machine-api"
+      subjects:
+        kind: ServiceAccount
+        name: ansible-tnc-gitops-sa
+        namespace: tnc-gitops-vms
+        apiGroup: ""
+      roleRef:
+        kind: ClusterRole
+        name: view-machine-api
+
+job:
+  image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest

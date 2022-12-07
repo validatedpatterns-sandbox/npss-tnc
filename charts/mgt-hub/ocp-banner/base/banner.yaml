@@ -1,0 +1,10 @@
+---
+apiVersion: console.openshift.io/v1
+kind: ConsoleNotification
+metadata:
+  name: npss-tnc-banner
+spec:
+  text: NPSS-TNC Cluster
+  location: BannerTop 
+  color: '#fff'
+  backgroundColor: '#000000'

@@ -9,14 +9,10 @@ clusterGroup:
   - open-cluster-management
   - vault
   - golang-external-secrets
-  - config-demo
-
   subscriptions:
     acm:
       name: advanced-cluster-management
       namespace: open-cluster-management
-      channel: release-2.6
-      #csv: advanced-cluster-management.v2.6.1
 
   projects:
   - hub
@@ -45,12 +41,6 @@ clusterGroup:
       namespace: golang-external-secrets
       project: hub
       path: common/golang-external-secrets
-
-    config-demo:
-      name: config-demo
-      namespace: config-demo
-      project: config-demo
-      path: charts/all/config-demo
 
   imperative:
     # NOTE: We *must* use lists and not hashes. As hashes lose ordering once parsed by helm
