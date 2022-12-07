@@ -14,9 +14,14 @@ clusterGroup:
       name: advanced-cluster-management
       namespace: open-cluster-management
 
+#    kubevirt-hyperconverged:
+#      name: kubevirt-hyperconverged
+#      namespace: openshift-cnv
+#      source: redhat-operators
+#      channel: stable
+
   projects:
   - hub
-  - config-demo
 
   applications:
     acm:
