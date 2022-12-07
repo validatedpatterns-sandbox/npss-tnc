@@ -1,3 +1,5 @@
+
+#file name depens in cluster group name
 clusterGroup:
   name: hub
   isHubCluster: true
