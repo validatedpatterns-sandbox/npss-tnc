@@ -9,13 +9,16 @@ clusterGroup:
   insecureUnsealVaultInsideCluster: true
 
   namespaces:
-  - open-cluster-management
+  - open-cluster-management. #for ACM
   - vault
   - golang-external-secrets
+  - npss-tnc-vms
+  
   subscriptions:
     acm:
       name: advanced-cluster-management
       namespace: open-cluster-management
+#     disable: true
 
 #    kubevirt-hyperconverged:
 #      name: kubevirt-hyperconverged
