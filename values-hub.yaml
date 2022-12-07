@@ -1,5 +1,6 @@
 
-#file name depens in cluster group name
+#file name depends   clusterGroupName in values-global.yaml
+
 clusterGroup:
   name: hub
   isHubCluster: true
