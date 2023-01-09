@@ -236,7 +236,6 @@ data:
         serviceAccountName: imperative-sa
         valuesConfigMap: helm-values-configmap
         verbosity: ""
-      insecureUnsealVaultInsideCluster: true
       isHubCluster: true
       managedClusterGroups:
         region-one:
@@ -303,8 +302,6 @@ data:
     secretStore:
       kind: ClusterSecretStore
       name: vault-backend
-    secretsBase:
-      key: secret/data/hub
 ---
 # Source: pattern-clustergroup/templates/imperative/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -531,8 +528,6 @@ spec:
                 - ansible-playbook
                 - -e
                 - "@/values/values.yaml"
-                - -e
-                - '{"file_unseal": false}'
                 - -t
                 - 'vault_init,vault_unseal,vault_secrets_init'
                 - "common/ansible/playbooks/vault/vault.yaml"
@@ -1505,7 +1500,6 @@ spec:
   name: opendatahub-operator
   source: community-operators
   sourceNamespace: openshift-marketplace
-  channel: stable
   installPlanApproval: Automatic
 ---
 # Source: pattern-clustergroup/templates/core/subscriptions.yaml
