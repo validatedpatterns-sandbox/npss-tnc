@@ -1,5 +1,26 @@
 # Changes
 
+## January 29, 2023
+
+* Stop extracting the HUB's CA via an imperative job running on the imported cluster.
+  Just use ACM to push the HUB's CA out to the managed clusters.
+
+## January 23, 2023
+
+* Add initial support for running ESO on ACM-imported clusters
+
+## January 18, 2023
+
+* Add validate-schema target
+
+## January 13, 2023
+
+* Simplify the secrets paths when using argo hosted sites
+
+## January 10, 2023
+
+* vaultPrefixes is now optional in the v2 secret spec and defaults to ["hub"]
+
 ## December 9, 2022
 
 * Dropped insecureUnsealVaultInsideCluster (and file_unseal) entirely. Now
