@@ -4,9 +4,6 @@
 clusterGroup:
   name: hub
   isHubCluster: true
-  # Note: setting this to true stores the vault unseal keys inside a cluster secret and
-  # is fundamentally insecure
-  #  insecureUnsealVaultInsideCluster: true
 
   namespaces:
   - open-cluster-management #for ACM
@@ -21,11 +18,11 @@ clusterGroup:
   - service-telemetry
   - kafka-cluster 
   - openshift-operators-redhat
-    #  - openshift-logging  
   - prom-kafka-adapter 
   - edge-gitops-vms
   - mano-apps
   - mano-automation
+    #  - openshift-logging  
     #  - openshift-performance-addon-operator
 
   subscriptions:
@@ -73,7 +70,7 @@ clusterGroup:
         #      name: performance-addon-operator
         #      namespace: openshift-performance-addon-operator    
 
-    Talam:
+    talam:
       name: topology-aware-lifecycle-manager
       namespace: openshift-operators 
 
@@ -157,7 +154,6 @@ clusterGroup:
     mc:    
       name: mc
       path: charts/mgt-hub/mc  
-        #      namespace: openshift-performance-addon-operator
       project: hub
 
 
@@ -184,23 +180,20 @@ clusterGroup:
       verbosity: -vvv
       timeout: "900"
     clusterRoleYaml:
-      - apiGroups:
-          - "*"
-        resources:
-          - machinesets
-        verbs:
-          - "*"
-      - apiGroups:
-          - "*"
-        resources:
-          - "*"
-        verbs:
-          - get
-          - list
-          - watch
-
-  applications:
-    aap:
+    - apiGroups:
+        - "*"
+      resources:
+        - machinesets
+      verbs:
+        - "*"
+    - apiGroups:
+        - "*"
+      resources:
+        - "*"
+      verbs:
+        - get
+        - list
+        - watch
 
   managedClusterGroups:
     exampleRegion:
