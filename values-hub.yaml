@@ -175,6 +175,32 @@ clusterGroup:
       # per playbook timeout in seconds
       timeout: 234
       # verbosity: "-v"
+    - name: deploy-kubevirt-worker
+      playbook: ansible/deploy_kubevirt_worker.yml
+      verbosity: -vvv
+    - name: configure-aap-controller
+      playbook: ansible/imperative_configure_controller.yml
+      image: quay.io/hybridcloudpatterns/ansible-edge-gitops-ee:latest
+      verbosity: -vvv
+      timeout: "900"
+    clusterRoleYaml:
+      - apiGroups:
+          - "*"
+        resources:
+          - machinesets
+        verbs:
+          - "*"
+      - apiGroups:
+          - "*"
+        resources:
+          - "*"
+        verbs:
+          - get
+          - list
+          - watch
+
+  applications:
+    aap:
 
   managedClusterGroups:
     exampleRegion:
