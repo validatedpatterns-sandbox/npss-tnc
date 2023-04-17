@@ -151,7 +151,7 @@ clusterGroup:
     edge-gitops-vms:
       name: edge-gitops-vms
       namespace: edge-gitops-vms
-      path: charts/mgt-hub/gitops-vms
+      path: charts/mgt-hub/edge-gitops-vms
       project: hub    
 
     mc:    
