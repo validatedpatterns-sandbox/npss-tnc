@@ -20,7 +20,7 @@ clusterGroup:
   - policies  
   - service-telemetry
   - kafka-cluster 
-    #  - openshift-operators-redhat
+  - openshift-operators-redhat
     #  - openshift-logging  
   - prom-kafka-adapter 
   - edge-gitops-vms
