@@ -1,0 +1,156 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  labels:
+    strimzi.io/cluster: mgnt-kafka
+  name: cwl-site1-ocp-metrics
+  namespace: kafka-cluster
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  config:
+    retention.ms: 60000
+    retention.bytes: 200000000
+  partitions: 1
+  replicas: 1
+  topicName: cwl-site1-ocp-metrics
+---
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  labels:
+    strimzi.io/cluster: mgnt-kafka
+  name: cwl-site2-ocp-metrics
+  namespace: kafka-cluster
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  config:
+    retention.ms: 60000
+    retention.bytes: 200000000
+  partitions: 1
+  replicas: 1
+  topicName: cwl-site2-ocp-metrics
+---
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  labels:
+    strimzi.io/cluster: mgnt-kafka
+  name: cwl-site1-infra-logs
+  namespace: kafka-cluster
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  config:
+    retention.ms: 60000
+    retention.bytes: 200000000
+  partitions: 1
+  replicas: 1
+  topicName: cwl-site1-infra-logs
+---
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  labels:
+    strimzi.io/cluster: mgnt-kafka
+  name: cwl-site2-infra-logs
+  namespace: kafka-cluster
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  config:
+    retention.ms: 60000
+    retention.bytes: 200000000
+  partitions: 1
+  replicas: 1
+  topicName: cwl-site2-infra-logs
+---
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  labels:
+    strimzi.io/cluster: mgnt-kafka
+  name: cwl-site1-audit-logs
+  namespace: kafka-cluster
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  config:
+    retention.ms: 60000
+    retention.bytes: 200000000 
+  partitions: 1
+  replicas: 1
+  topicName: cwl-site1-audit-logs
+---
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  labels:
+    strimzi.io/cluster: mgnt-kafka
+  name: cwl-site2-audit-logs
+  namespace: kafka-cluster
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  config:
+    retention.ms: 60000
+    retention.bytes: 200000000   
+  partitions: 1
+  replicas: 1
+  topicName: cwl-site2-audit-logs
+
+---
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  labels:
+    strimzi.io/cluster: mgnt-kafka
+  name: cwl-site1-app-logs
+  namespace: kafka-cluster
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  config:
+    retention.ms: 60000
+    retention.bytes: 200000000  
+  partitions: 1
+  replicas: 1
+  topicName: cwl-site1-app-logs
+
+---
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  labels:
+    strimzi.io/cluster: mgnt-kafka
+  name: cwl-site2-app-logs
+  namespace: kafka-cluster
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  config:
+    retention.ms: 60000
+    retention.bytes: 200000000  
+  partitions: 1
+  replicas: 1
+  topicName: cwl-site2-app-logs
+
+
+
+

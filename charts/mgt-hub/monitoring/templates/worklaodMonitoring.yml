@@ -1,0 +1,30 @@
+#ConfgMap to setup storage and retention parameters for user workload monitoring.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-workload-monitoring-config
+  namespace: openshift-user-workload-monitoring
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+
+data:
+  config.yaml: |
+    prometheus:
+      retention: 1d
+      volumeClaimTemplate:
+        spec:
+          storageClassName: ocs-storagecluster-ceph-rbd
+          resources:
+            requests:
+              storage: 5Gi
+      enforcedSampleLimit: 50000
+    thanosRuler:
+      retention: 1d
+      volumeClaimTemplate:
+        spec:
+          storageClassName: ocs-storagecluster-ceph-rbd
+          resources:
+            requests:
+              storage: 5Gi
+
+

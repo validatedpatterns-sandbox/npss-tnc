@@ -6,9 +6,7 @@ secretStore:
   name: vault-backend
   kind: ClusterSecretStore
 
-cloudInit:
-  defaultUser: 'cloud-user'
-  defaultPassword: '6toh-n1d5-9xpq'
+cloudInitDefaultSecretName: secret/data/hub/cloud-init
 
 # Or "RWO" and "gp2"; other choices are possible too but
 # these are defaults for ODF which is included in the pattern
@@ -16,7 +14,7 @@ defaultAccessMode: "ReadWriteMany"
 defaultStorageClassName: "ocs-storagecluster-ceph-rbd"
 defaultVolumeMode: "Block"
 
-vmNamespace: tnc-gitops-vms
+vmNamespace: edge-gitops-vms
 
 waitForMetalNode: true
 jobTerminationGracePeriod: 3600
@@ -33,10 +31,9 @@ vms:
     cores: 1
     sockets: 1
     threads: 1
-    cloudInitUser: cloud-user
-    cloudInitPassword: 6toh-n1d5-9xpq
     template: rhel8-desktop-medium
     sshsecret: secret/data/hub/kiosk-ssh
+    # cloudinitsecret: 'may also be specified, same format as sshsecret'
     sshpubkeyfield: publickey
     ports:
       - name: ssh
@@ -48,7 +45,7 @@ vms:
         protocol: TCP
         targetPort: 3389
 
-serviceAccountName: ansible-tnc-gitops-sa
+serviceAccountName: npss-tnc-gitops-sa
 rbac:
   roles:
     - name: view-machine-api
@@ -71,8 +68,8 @@ rbac:
         namespace: "openshift-machine-api"
       subjects:
         kind: ServiceAccount
-        name: ansible-tnc-gitops-sa
-        namespace: tnc-gitops-vms
+        name: npss-tnc-gitops-sa
+        namespace: edge-gitops-vms
         apiGroup: ""
       roleRef:
         kind: ClusterRole

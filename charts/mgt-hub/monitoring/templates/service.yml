@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-kafka-adapter
+  namespace: prom-kafka-adapter
+  labels:
+    app: prometheus-kafka-adapter
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+
+
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: prometheus-kafka-adapter
+
+
+

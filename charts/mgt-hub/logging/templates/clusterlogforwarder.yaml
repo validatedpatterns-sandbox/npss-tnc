@@ -1,0 +1,45 @@
+apiVersion: logging.openshift.io/v1
+kind: ClusterLogForwarder
+metadata:
+  name: instance
+  namespace: openshift-logging
+spec:
+  outputs:
+   - name: infra-logs
+     type: kafka
+     url: tls://mgnt-kafka-kafka-bootstrap-kafka-cluster.apps.npss-tnc-4.blueprints.rhecoeng.com:443/vim_infra_logs
+     secret:
+       name: kafka-secret
+   - name: audit-logs
+     type: kafka
+     url: tls://mgnt-kafka-kafka-bootstrap-kafka-cluster.apps.npss-tnc-4.blueprints.rhecoeng.com:443/vim_audit_logs
+     secret:
+       name: kafka-secret
+   - name: app-logs
+     type: kafka
+     url: tls://mgnt-kafka-kafka-bootstrap-kafka-cluster.apps.npss-tnc-4.blueprints.rhecoeng.com:443/vim_app_logs
+     secret:
+       name: kafka-secret
+  pipelines:
+   - name: vim_infra_logs
+     inputRefs:
+     - infrastructure
+     outputRefs:
+     - infra-logs
+     labels:
+       logType: "infra"
+   - name: vim_audit_logs
+     inputRefs:
+     - audit
+     outputRefs:
+     - audit-logs
+     labels:
+       logType: "audit"
+   - name: vim_app_logs
+     inputRefs:
+     - application
+     outputRefs:
+     - app-logs
+     labels:
+       logType: "app"
+

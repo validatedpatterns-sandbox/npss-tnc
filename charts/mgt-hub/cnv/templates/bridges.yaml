@@ -1,0 +1,35 @@
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: multus-interfaces
+spec:
+  nodeSelector: 
+    node-role.kubernetes.io/worker: ''
+  desiredState:
+    interfaces:
+    - name: br-apps
+      type: linux-bridge
+      state: up
+      ipv4:
+        dhcp: false
+        enabled: false
+      bridge:
+        options:
+          stp:
+            enabled: false
+        port:
+          - name: app-port
+    - name: br-automation
+      type: linux-bridge
+      state: up
+      ipv4:
+        dhcp: false
+        enabled: false
+      bridge:
+        options:
+          stp:
+            enabled: false
+        port:
+          - name: auto-port
+
+

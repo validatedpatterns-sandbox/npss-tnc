@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: prometheus-kafka-adapter
+  name: prometheus-kafka-adapter
+  namespace: prom-kafka-adapter
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: prometheus-kafka-adapter
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: prometheus-kafka-adapter
+    spec:
+      containers:
+      - image: telefonica/prometheus-kafka-adapter:1.7.0
+        imagePullPolicy: IfNotPresent
+        name: prometheus-kafka-adapter
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        env:
+        - name: KAFKA_BROKER_LIST
+          value: mano-kafka-cluster-kafka-bootstrap-kafka-cluster.apps.npss-tnc-4.blueprints.rhecoeng.com/
+        - name: KAFKA_TOPIC
+          value: mano-ocp-metrics
+        - name: KAFKA_SSL_CA_CERT_FILE
+          value: /etc/ssl/certs/my-certs/ca-bundle.crt
+        - name: KAFKA_SSL_CLIENT_KEY_FILE
+          value: /etc/ssl/certs/my-certs/tls.key
+        - name: KAFKA_SSL_CLIENT_CERT_FILE
+          value: /etc/ssl/certs/my-certs/tls.crt
+        - name: PORT
+          value: "8080"
+        - name: GIN_MODE
+          value: release
+        volumeMounts:
+        - mountPath: /etc/ssl/certs/my-certs
+          name: ca-pemstore
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+      dnsPolicy: ClusterFirst
+      schedulerName: default-scheduler
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: kafka-certs
+        name: ca-pemstore
+
+
+
+

@@ -51,7 +51,7 @@ metadata:
     template.kubevirt.io/version: v0.19.4
     workload.template.kubevirt.io/desktop: "true"
   name: rhel8-kiosk-with-svc
-  namespace: tnc-gitops-vms
+  namespace: edge-gitops-vms
 objects:
 - apiVersion: kubevirt.io/v1
   kind: VirtualMachine
@@ -69,7 +69,7 @@ objects:
         ]
     labels:
       app: ${NAME}
-      tnc-gitops-role: kiosk
+      edge-gitops-role: kiosk
       vm.kubevirt.io/template: rhel8-desktop-medium
       vm.kubevirt.io/template.revision: "1"
       vm.kubevirt.io/template.version: v0.19.4
