@@ -151,10 +151,10 @@ clusterGroup:
       path: charts/mgt-hub/edge-gitops-vms
       project: hub    
 
-    mc:    
-      name: mc
-      path: charts/mgt-hub/mc  
-      project: hub
+#    mc:    
+#      name: mc
+#      path: charts/mgt-hub/mc  
+#      project: hub
 
 
   imperative:
