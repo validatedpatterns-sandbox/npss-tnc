@@ -139,11 +139,11 @@ clusterGroup:
       path: charts/mgt-hub/monitoring
       project: hub  
 
-    logging:
-      name: logging
-      namespace: openshift-logging
-      path: charts/mgt-hub/logging
-      project: hub
+#    logging:
+#      name: logging
+#      namespace: openshift-logging
+#      path: charts/mgt-hub/logging
+#      project: hub
   
     edge-gitops-vms:
       name: edge-gitops-vms
