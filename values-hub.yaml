@@ -62,9 +62,9 @@ clusterGroup:
       name: elasticsearch-operator
       namespace: openshift-operators-redhat
 
-    logging:
-      name: cluster-logging
-      namespace: openshift-logging
+    #logging:
+    #  name: cluster-logging
+    #  namespace: openshift-logging
    
         #    pao:
         #      name: performance-addon-operator
@@ -139,11 +139,11 @@ clusterGroup:
       path: charts/mgt-hub/monitoring
       project: hub  
 
-#    logging:
-#      name: logging
-#      namespace: openshift-logging
-#      path: charts/mgt-hub/logging
-#      project: hub
+    logging:
+      name: logging
+      namespace: openshift-logging
+      path: charts/mgt-hub/logging
+      project: hub
   
     edge-gitops-vms:
       name: edge-gitops-vms
