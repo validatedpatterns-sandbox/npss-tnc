@@ -2,6 +2,7 @@
 default: help
 
 .PHONY: help
+
 ##@ Pattern tasks
 
 # No need to add a comment here as help is described in common/
