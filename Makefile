@@ -21,6 +21,9 @@ post-install: ## Post-install tasks
 	make load-secrets
 	@echo "Done"
 
+KUBECONFORM_SKIP=-skip 'CustomResourceDefinition,Pipeline,Task,KfDef,Integration,IntegrationPlatform,Kafka,ActiveMQArtemis,KafkaTopic,SeldonDeployment,KafkaMirrorMaker,OdhDashboardConfig,ArgoCD,CertManager,Certificate,ClusterIssuer,HyperConverged,VirtualMachine,OCSInitialization,StorageCluster,QuayRegistry'
+kubeconform:
+	make -f common/Makefile KUBECONFORM_SKIP="$(KUBECONFORM_SKIP)" kubeconform
 .PHONY: test
 test:
 	@make -f common/Makefile PATTERN_OPTS="-f values-global.yaml -f values-hub.yaml" test
