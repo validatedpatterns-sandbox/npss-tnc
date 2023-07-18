@@ -1,10 +1,16 @@
-NAME=$(shell basename "`pwd`")
+NAME ?= $(shell basename "`pwd`")
 ifneq ($(origin TARGET_SITE), undefined)
   TARGET_SITE_OPT=--set main.clusterGroupName=$(TARGET_SITE)
 endif
 
+# This variable can be set in order to pass additional helm arguments from the
+# the command line. I.e. we can set things without having to tweak values files
+EXTRA_HELM_OPTS ?=
+
 # INDEX_IMAGES=registry-proxy.engineering.redhat.com/rh-osbs/iib:394248
-INDEX_IMAGES ?= 
+# or
+# INDEX_IMAGES=registry-proxy.engineering.redhat.com/rh-osbs/iib:394248,registry-proxy.engineering.redhat.com/rh-osbs/iib:394249
+INDEX_IMAGES ?=
 
 TARGET_ORIGIN ?= origin
 # This is to ensure that whether we start with a git@ or https:// URL, we end up with an https:// URL
@@ -14,12 +20,13 @@ TARGET_REPO=$(shell git ls-remote --get-url --symref $(TARGET_ORIGIN) | sed -e '
 TARGET_BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
 
 # --set values always take precedence over the contents of -f
-HELM_OPTS=-f values-global.yaml --set main.git.repoURL="$(TARGET_REPO)" --set main.git.revision=$(TARGET_BRANCH) $(TARGET_SITE_OPT)
+HELM_OPTS=-f values-global.yaml --set main.git.repoURL="$(TARGET_REPO)" --set main.git.revision=$(TARGET_BRANCH) $(TARGET_SITE_OPT) $(EXTRA_HELM_OPTS)
 
 ##@ Pattern Common Tasks
 
 .PHONY: help
 help: ## This help message
+	@echo "Pattern: $(NAME)"
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^(\s|[a-zA-Z_0-9-])+:.*?##/ { printf "  \033[36m%-35s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
 #  Makefiles in the individual patterns should call these targets explicitly
@@ -34,7 +41,7 @@ show: ## show the starting template without installing it
 # warnings when the chart gets applied the first time, but the resources were
 # created first via the VP operator's UI
 .PHONY: operator-deploy
-operator-deploy operator-upgrade: validate-prereq validate-origin load-iibs ## runs helm install
+operator-deploy operator-upgrade: validate-prereq validate-origin ## runs helm install
 	@set -e; if ! oc get crds patterns.gitops.hybrid-cloud-patterns.io >/dev/null 2>&1; then \
 	  echo "Running helm:"; \
 	  helm upgrade --install $(NAME) common/operator-install/ $(HELM_OPTS); \
@@ -54,20 +61,11 @@ uninstall: ## runs helm uninstall
 load-secrets: ## loads the secrets into the vault
 	common/scripts/vault-utils.sh push_secrets $(NAME)
 
-b.PHONY: load-iibs
-load-iibs:
+.PHONY: load-iib
+load-iib: ## CI target to install Index Image Bundles
 	@set -e; if [ x$(INDEX_IMAGES) != x ]; then \
-		echo "Allowing insecure registries"; \
-		oc patch image.config.openshift.io/cluster --patch '{"spec":{"registrySources":{"insecureRegistries":["registry-proxy-stage.engineering.redhat.com", "registry-proxy.engineering.redhat.com"]}}}' --type=merge; \
-		for iib in $(shell echo $(INDEX_IMAGES) | tr ',' '\n'); do \
-			echo "Processing $$iib" \
-			export iibnum=$$(echo $$iib | sed 's/.*://'); \
-			rm -rf $$PWD/manifests-iib-* ;\
-			oc adm catalog mirror --manifests-only $$iib $$(dirname $$iib) --insecure; \
-			sed -i "s/name: iib$$/name: iib-$$iibnum/" $$PWD/manifests-iib-*/catalogSource.yaml ; \
-			echo "Applying $$iib manifests" \
-			oc apply -f $$PWD/manifests-iib-*/imageContentSourcePolicy.yaml ; \
-			oc apply -f $$PWD/manifests-iib-*/catalogSource.yaml ; \
+		for IIB in $(shell echo $(INDEX_IMAGES) | tr ',' '\n'); do \
+			INDEX_IMAGE="$${IIB}" ansible-playbook common/ansible/playbooks/iib-ci/iib-ci.yaml; \
 		done; \
 	fi
 
@@ -127,7 +125,8 @@ helmlint: ## run helm lint
 	@for t in $(CHARTS); do common/scripts/lint.sh $$t $(TEST_OPTS); if [ $$? != 0 ]; then exit 1; fi; done
 
 API_URL ?= https://raw.githubusercontent.com/hybrid-cloud-patterns/ocp-schemas/main/openshift/4.10/
-KUBECONFORM_SKIP ?= -skip 'CustomResourceDefinition,ClusterIssuer,CertManager,Certificate'
+KUBECONFORM_SKIP ?= -skip 'CustomResourceDefinition,ClusterIssuer,CertManager,Certificate,ArgoCD'
+
 # We need to skip 'CustomResourceDefinition' as openapi2jsonschema seems to be unable to generate them ATM
 .PHONY: kubeconform
 kubeconform: ## run helm kubeconform
