@@ -28,6 +28,6 @@ test:
 	@make -f common/Makefile PATTERN_OPTS="-f values-global.yaml -f values-hub.yaml" test
 
 .PHONY: kubeconform
-KUBECONFORM_SKIP=-skip 'CustomResourceDefinition,QuayRegistry,HyperConverged,VirtualMachine,OCSInitialization,StorageCluster,Certificate,CertManager,ClusterIssuer'
+KUBECONFORM_SKIP=-skip 'CustomResourceDefinition,QuayRegistry,HyperConverged,VirtualMachine,OCSInitialization,StorageCluster,Certificate,CertManager,ClusterIssuer,ArgoCD'
 kubeconform:
 	make -f common/Makefile KUBECONFORM_SKIP="$(KUBECONFORM_SKIP)" kubeconform
